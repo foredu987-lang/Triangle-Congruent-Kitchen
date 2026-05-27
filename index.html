@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>幾何廚房 - 終極派對版</title>
+    <title>幾何廚房 - 跨平台終極版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
@@ -13,21 +13,22 @@
 
         /* --- 開始選單 --- */
         #start-menu { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #fbcfe8 0%, #bfdbfe 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; }
-        .menu-title { font-size: 5rem; font-weight: 900; color: #1e3a8a; text-shadow: 3px 3px 0 #fff, 5px 5px 10px rgba(0,0,0,0.2); margin-bottom: 2rem; text-align: center; line-height: 1.2; }
-        .btn-start { background: #3b82f6; color: white; font-size: 2rem; font-weight: bold; padding: 15px 40px; border-radius: 20px; border-bottom: 8px solid #1d4ed8; margin: 10px; cursor: pointer; transition: all 0.1s; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); }
-        .btn-start:active { transform: translateY(8px); border-bottom-width: 0; }
+        .menu-title { font-size: 4rem; font-weight: 900; color: #1e3a8a; text-shadow: 2px 2px 0 #fff, 4px 4px 8px rgba(0,0,0,0.2); margin-bottom: 2rem; text-align: center; line-height: 1.2; }
+        
+        .mode-section { background: rgba(255,255,255,0.6); padding: 20px; border-radius: 20px; margin: 10px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 80%; max-width: 600px; }
+        .mode-title { font-size: 1.8rem; font-weight: bold; color: #374151; margin-bottom: 15px; }
+        .btn-start { background: #3b82f6; color: white; font-size: 1.5rem; font-weight: bold; padding: 15px 30px; border-radius: 15px; border-bottom: 6px solid #1d4ed8; margin: 5px; cursor: pointer; transition: all 0.1s; }
+        .btn-start:active { transform: translateY(6px); border-bottom-width: 0; }
         .btn-start.p2 { background: #ef4444; border-bottom-color: #b91c1c; }
-        .checkbox-label { display: flex; align-items: center; gap: 10px; font-size: 1.5rem; font-weight: bold; color: #374151; cursor: pointer; margin-top: 20px; background: rgba(255,255,255,0.5); padding: 10px 20px; border-radius: 15px;}
-        .checkbox-label input[type="checkbox"] { width: 25px; height: 25px; cursor: pointer; }
 
         /* --- 遊戲主體 --- */
         #game-container { position: relative; width: 100%; height: 100%; display: none; flex-direction: column; }
         
         /* 縮小且半透明的 HUD */
-        #hud { height: 6vh; min-height: 40px; background-color: rgba(255,255,255,0.85); box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; padding: 0 15vw; z-index: 8500; pointer-events: none; position: absolute; top:0; width: 100%; }
+        #hud { height: 8vh; min-height: 50px; background-color: rgba(255,255,255,0.85); box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; padding: 0 10vw; z-index: 8500; pointer-events: none; position: absolute; top:0; width: 100%; }
         
-        /* 訂單排隊區 */
-        #order-queue { position: absolute; top: 7vh; left: 50%; transform: translateX(-50%); display: flex; gap: 25px; z-index: 8000; pointer-events: none; }
+        /* 訂單排隊區 - 確保不被擋住 */
+        #order-queue { position: absolute; top: 10vh; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; z-index: 8000; pointer-events: none; width: 90%; justify-content: center; }
         .order-ticket { width: 110px; background: white; border: 3px solid #d1d5db; border-top: 10px solid #94a3b8; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center; padding: 8px 5px; transition: all 0.3s; position: relative; }
         .order-ticket.danger { border-top-color: #ef4444; animation: shake 0.5s infinite; }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-3px) rotate(-2deg); } 75% { transform: translateX(3px) rotate(2deg); } }
@@ -71,25 +72,24 @@
         .item { position: absolute; display: flex; justify-content: center; align-items: center; font-weight: bold; box-shadow: 2px 5px 10px rgba(0,0,0,0.3); pointer-events: none; z-index: 40; transition: all 0.1s ease-out; }
         .ingredient-filling { width: 65px; height: 65px; border-radius: 12px; border: 4px solid #fff; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); font-size: 1.2rem; }
         .filling-SSS { background-color: #ef4444; } .filling-SAS { background-color: #eab308; } .filling-ASA { background-color: #22c55e; } .filling-AAS { background-color: #f97316; } .filling-RHS { background-color: #fef08a; color: #854d0e; border-color: #facc15; } 
-        .ingredient-toast { width: 85px; height: 85px; background-color: #fef08a; border: 5px solid #ca8a04; border-radius: 12px 12px 18px 18px; padding: 4px; }
-        .ingredient-drink { width: 50px; height: 75px; background: linear-gradient(to bottom, #ffffff 30%, #bfdbfe 100%); border: 4px solid #3b82f6; border-bottom-width: 8px; border-radius: 8px 8px 15px 15px; font-size: 2rem; color: #1e3a8a; display: flex; justify-content: center; align-items: center; }
+        .ingredient-toast { width: 80px; height: 80px; background-color: #fef08a; border: 5px solid #ca8a04; border-radius: 12px 12px 18px 18px; padding: 4px; }
+        .ingredient-drink { width: 45px; height: 65px; background: linear-gradient(to bottom, #ffffff 30%, #bfdbfe 100%); border: 4px solid #3b82f6; border-bottom-width: 8px; border-radius: 8px 8px 15px 15px; font-size: 2rem; color: #1e3a8a; display: flex; justify-content: center; align-items: center; }
         .drink-cola { background: linear-gradient(to bottom, #ffffff 20%, #475569 100%); border-color: #1e293b; } .drink-juice { background: linear-gradient(to bottom, #ffffff 20%, #fde047 100%); border-color: #ca8a04; }
-        .burnt-trash { width: 70px; height: 70px; background-color: #374151; border-radius: 50%; color: #9ca3af; border: 4px solid #111827; font-size: 1rem;}
-        
+        .burnt-trash { width: 65px; height: 65px; background-color: #374151; border-radius: 50%; color: #9ca3af; border: 4px solid #111827; font-size: 1rem;}
         .held-by-player { transform: translateY(-70px) scale(1.1) !important; box-shadow: 0 30px 20px -10px rgba(0,0,0,0.5) !important; z-index: 10000 !important; }
         .on-station { transform: scale(0.85); }
-        .floating-text { position: absolute; font-size: 1.5rem; font-weight: 900; color: white; text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; pointer-events: none; animation: floatUp 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; z-index: 1000; }
+        .floating-text { position: absolute; font-size: 1.5rem; font-weight: 900; color: white; text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; pointer-events: none; animation: floatUp 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; z-index: 10000; }
         @keyframes floatUp { 0% { transform: translateY(0) scale(0.5); opacity: 0; } 20% { transform: translateY(-20px) scale(1.2); opacity: 1; } 100% { transform: translateY(-60px) scale(1); opacity: 0; } }
 
-        /* --- 響應式虛擬搖桿 (單/雙人佈局) --- */
-        #mobile-controls { position: absolute; bottom: 0; width: 100%; height: 100%; display: none; pointer-events: none; z-index: 9999; }
+        /* --- 虛擬搖桿與按鈕 (平板專用) --- */
+        #mobile-controls { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; pointer-events: none; z-index: 9999; }
         
-        .joystick-zone { width: 35vw; max-width: 350px; height: 35vw; max-height: 350px; position: absolute; border-radius: 50%; pointer-events: auto; display: flex; justify-content: center; align-items: center; touch-action: none; }
-        .joystick-base { width: 20vw; max-width: 200px; height: 20vw; max-height: 200px; background: rgba(255,255,255,0.4); border: 6px solid rgba(255,255,255,0.7); border-radius: 50%; position: relative; pointer-events: none; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-        .joystick-stick { width: 8vw; max-width: 80px; height: 8vw; max-height: 80px; background: rgba(59, 130, 246, 0.85); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); box-shadow: inset -5px -5px 15px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.4); transition: transform 0.05s linear; pointer-events: none; }
+        .joystick-zone { width: 220px; height: 220px; position: absolute; border-radius: 50%; pointer-events: auto; display: flex; justify-content: center; align-items: center; touch-action: none; }
+        .joystick-base { width: 160px; height: 160px; background: rgba(255,255,255,0.3); border: 6px solid rgba(255,255,255,0.7); border-radius: 50%; position: relative; pointer-events: none; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .joystick-stick { width: 70px; height: 70px; background: rgba(59, 130, 246, 0.85); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); box-shadow: inset -5px -5px 15px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.4); transition: transform 0.05s linear; pointer-events: none; }
         .p2-controls .joystick-stick { background: rgba(239, 68, 68, 0.85); }
         
-        .action-btn { width: 18vw; max-width: 180px; height: 18vw; max-height: 180px; background: rgba(255,255,255,0.85); border: 8px solid #ca8a04; border-radius: 50%; position: absolute; font-weight: 900; color: #ca8a04; font-size: 2.2rem; display: flex; justify-content: center; align-items: center; text-align: center; pointer-events: auto; box-shadow: 0 10px 20px rgba(0,0,0,0.3); touch-action: none; transition: transform 0.1s, background 0.1s; cursor: pointer; }
+        .action-btn { width: 120px; height: 120px; background: rgba(255,255,255,0.85); border: 8px solid #ca8a04; border-radius: 50%; position: absolute; font-weight: 900; color: #ca8a04; font-size: 2rem; display: flex; justify-content: center; align-items: center; text-align: center; pointer-events: auto; box-shadow: 0 10px 20px rgba(0,0,0,0.3); touch-action: none; transition: transform 0.1s, background 0.1s; cursor: pointer; }
         .action-btn:active { background: #fef08a; transform: scale(0.9); box-shadow: 0 5px 10px rgba(0,0,0,0.2); }
         .p2-controls .action-btn { border-color: #b91c1c; color: #b91c1c; }
         .p2-controls .action-btn:active { background: #fecaca; }
@@ -103,61 +103,66 @@
     <!-- 首頁選單 -->
     <div id="start-menu">
         <div class="menu-title">幾何廚房<br><span class="text-3xl text-blue-600">🍞全等三明治🍞</span></div>
-        <button class="btn-start p1" onclick="startGame(1)">🧍 單人遊玩 (1P)</button>
-        <button class="btn-start p2" onclick="startGame(2)">🧍🧍 雙人對坐平板模式 (1P+2P)</button>
-        <label class="checkbox-label">
-            <input type="checkbox" id="force-touch-controls" checked> 
-            📱 強制啟用觸控面板佈局
-        </label>
+        
+        <div class="mode-section">
+            <div class="mode-title">🖥️ 電腦模式 (無搖桿，純鍵盤)</div>
+            <button class="btn-start" onclick="startGame(1, false)">🧍 單人遊玩</button>
+            <button class="btn-start p2" onclick="startGame(2, false)">🧍🧍 雙人合作</button>
+        </div>
+
+        <div class="mode-section mt-4">
+            <div class="mode-title">📱 平板模式 (顯示虛擬搖桿)</div>
+            <button class="btn-start" onclick="startGame(1, true)">🧍 單人遊玩</button>
+            <button class="btn-start p2" onclick="startGame(2, true)">🧍🧍 雙人對坐</button>
+        </div>
     </div>
 
     <!-- 遊戲容器 -->
     <div id="game-container">
-        <!-- 縮小 HUD 騰出空間 -->
+        <!-- HUD -->
         <div id="hud">
-            <div class="text-xl font-black text-green-600">總分: <span id="score">0</span></div>
-            <div class="text-xl font-black text-red-500">倒數: <span id="timer">120</span>s</div>
+            <div class="text-2xl font-black text-green-600">總分: <span id="score">0</span></div>
+            <div class="text-2xl font-black text-red-500">倒數: <span id="timer">120</span>s</div>
         </div>
 
         <div id="play-area">
             <div id="order-queue"></div>
             
-            <!-- 出餐櫃檯 -->
-            <div id="serve-station" class="station" style="left: 50%; transform: translateX(-50%); top: 15vh; width: 60%; max-width: 600px; height: 9vh; min-height: 60px;"><div class="text-green-900 font-black text-2xl">🛎️ 出餐櫃檯 🛎️</div></div>
-            <div id="trash-station" class="station" style="right: 5%; top: 15vh; width: 8vh; height: 8vh; min-width:60px; min-height:60px;"><div class="text-red-900 font-black text-xl">🗑️</div></div>
+            <!-- 【佈局優化】：出餐櫃檯大幅往下退 (top: 26vh)，騰出空間給上方訂單 -->
+            <div id="serve-station" class="station" style="left: 50%; transform: translateX(-50%); top: 26vh; width: 55%; max-width: 550px; height: 9vh; min-height: 60px;"><div class="text-green-900 font-black text-2xl">🛎️ 出餐櫃檯 🛎️</div></div>
+            <div id="trash-station" class="station" style="right: 8%; top: 26vh; width: 8vh; height: 8vh; min-width:60px; min-height:60px;"><div class="text-red-900 font-black text-xl">🗑️</div></div>
 
             <!-- 第一排：5 種夾餡 (不再隨機) -->
-            <div id="sup-f-SSS" class="station supply-filling" style="left: 20%; top: 30vh; width: 9vh; height: 9vh; min-width:65px; min-height:65px; transform: translateX(-50%);"></div>
-            <div id="sup-f-SAS" class="station supply-filling" style="left: 35%; top: 30vh; width: 9vh; height: 9vh; min-width:65px; min-height:65px; transform: translateX(-50%);"></div>
-            <div id="sup-f-ASA" class="station supply-filling" style="left: 50%; top: 30vh; width: 9vh; height: 9vh; min-width:65px; min-height:65px; transform: translateX(-50%);"></div>
-            <div id="sup-f-AAS" class="station supply-filling" style="left: 65%; top: 30vh; width: 9vh; height: 9vh; min-width:65px; min-height:65px; transform: translateX(-50%);"></div>
-            <div id="sup-f-RHS" class="station supply-filling" style="left: 80%; top: 30vh; width: 9vh; height: 9vh; min-width:65px; min-height:65px; transform: translateX(-50%);"></div>
+            <div id="sup-f-SSS" class="station supply-filling" style="left: 20%; top: 40vh; width: 9vh; height: 9vh; min-width:65px; min-height:65px; transform: translateX(-50%);"></div>
+            <div id="sup-f-SAS" class="station supply-filling" style="left: 35%; top: 40vh; width: 9vh; height: 9vh; min-width:65px; min-height:65px; transform: translateX(-50%);"></div>
+            <div id="sup-f-ASA" class="station supply-filling" style="left: 50%; top: 40vh; width: 9vh; height: 9vh; min-width:65px; min-height:65px; transform: translateX(-50%);"></div>
+            <div id="sup-f-AAS" class="station supply-filling" style="left: 65%; top: 40vh; width: 9vh; height: 9vh; min-width:65px; min-height:65px; transform: translateX(-50%);"></div>
+            <div id="sup-f-RHS" class="station supply-filling" style="left: 80%; top: 40vh; width: 9vh; height: 9vh; min-width:65px; min-height:65px; transform: translateX(-50%);"></div>
 
-            <!-- 【修改版】：第二排 飲料 + 4 個「完美均分間距」的料理台 -->
-            <div id="sup-cola" class="station supply-drink" style="left: 10%; top: 48vh; width: 8vh; height: 9vh; min-width:60px; min-height:70px; transform: translateX(-50%);"></div>
-            <div id="counter-1" class="station prep-counter" style="left: 26%; top: 48vh; width: 10vh; height: 10vh; min-width:70px; min-height:70px; transform: translateX(-50%);"></div>
-            <div id="counter-2" class="station prep-counter" style="left: 42%; top: 48vh; width: 10vh; height: 10vh; min-width:70px; min-height:70px; transform: translateX(-50%);"></div>
-            <div id="counter-3" class="station prep-counter" style="left: 58%; top: 48vh; width: 10vh; height: 10vh; min-width:70px; min-height:70px; transform: translateX(-50%);"></div>
-            <div id="counter-4" class="station prep-counter" style="left: 74%; top: 48vh; width: 10vh; height: 10vh; min-width:70px; min-height:70px; transform: translateX(-50%);"></div>
-            <div id="sup-juice" class="station supply-drink" style="left: 90%; top: 48vh; width: 8vh; height: 9vh; min-width:60px; min-height:70px; transform: translateX(-50%);"></div>
+            <!-- 第二排：飲料 + 4 個「完美均分間距」的料理台 -->
+            <div id="sup-cola" class="station supply-drink" style="left: 10%; top: 55vh; width: 8vh; height: 9vh; min-width:60px; min-height:70px; transform: translateX(-50%);"></div>
+            <div id="counter-1" class="station prep-counter" style="left: 27%; top: 55vh; width: 10vh; height: 10vh; min-width:70px; min-height:70px; transform: translateX(-50%);"></div>
+            <div id="counter-2" class="station prep-counter" style="left: 42%; top: 55vh; width: 10vh; height: 10vh; min-width:70px; min-height:70px; transform: translateX(-50%);"></div>
+            <div id="counter-3" class="station prep-counter" style="left: 58%; top: 55vh; width: 10vh; height: 10vh; min-width:70px; min-height:70px; transform: translateX(-50%);"></div>
+            <div id="counter-4" class="station prep-counter" style="left: 73%; top: 55vh; width: 10vh; height: 10vh; min-width:70px; min-height:70px; transform: translateX(-50%);"></div>
+            <div id="sup-juice" class="station supply-drink" style="left: 90%; top: 55vh; width: 8vh; height: 9vh; min-width:60px; min-height:70px; transform: translateX(-50%);"></div>
 
             <!-- 第三排：5 種吐司 (不再隨機) -->
-            <div id="sup-t-SSS" class="station supply-toast" style="left: 20%; top: 66vh; width: 9vh; height: 9vh; min-width:65px; min-height:65px; transform: translateX(-50%);"></div>
-            <div id="sup-t-SAS" class="station supply-toast" style="left: 35%; top: 66vh; width: 9vh; height: 9vh; min-width:65px; min-height:65px; transform: translateX(-50%);"></div>
-            <div id="sup-t-ASA" class="station supply-toast" style="left: 50%; top: 66vh; width: 9vh; height: 9vh; min-width:65px; min-height:65px; transform: translateX(-50%);"></div>
-            <div id="sup-t-AAS" class="station supply-toast" style="left: 65%; top: 66vh; width: 9vh; height: 9vh; min-width:65px; min-height:65px; transform: translateX(-50%);"></div>
-            <div id="sup-t-RHS" class="station supply-toast" style="left: 80%; top: 66vh; width: 9vh; height: 9vh; min-width:65px; min-height:65px; transform: translateX(-50%);"></div>
+            <div id="sup-t-SSS" class="station supply-toast" style="left: 20%; top: 70vh; width: 9vh; height: 9vh; min-width:65px; min-height:65px; transform: translateX(-50%);"></div>
+            <div id="sup-t-SAS" class="station supply-toast" style="left: 35%; top: 70vh; width: 9vh; height: 9vh; min-width:65px; min-height:65px; transform: translateX(-50%);"></div>
+            <div id="sup-t-ASA" class="station supply-toast" style="left: 50%; top: 70vh; width: 9vh; height: 9vh; min-width:65px; min-height:65px; transform: translateX(-50%);"></div>
+            <div id="sup-t-AAS" class="station supply-toast" style="left: 65%; top: 70vh; width: 9vh; height: 9vh; min-width:65px; min-height:65px; transform: translateX(-50%);"></div>
+            <div id="sup-t-RHS" class="station supply-toast" style="left: 80%; top: 70vh; width: 9vh; height: 9vh; min-width:65px; min-height:65px; transform: translateX(-50%);"></div>
 
             <!-- 玩家 1 & 2 -->
             <div id="player-1" class="player"><div class="p-label text-blue-500">1P</div><div class="chef-hat"></div><div class="chef-head"></div><div class="chef-body p1-body"></div><div class="player-dir"></div></div>
             <div id="player-2" class="player"><div class="p-label text-red-500">2P</div><div class="chef-hat"></div><div class="chef-head"></div><div class="chef-body p2-body"></div><div class="player-dir"></div></div>
         </div>
         
-        <!-- 虛擬搖桿與按鈕區 -->
+        <!-- 虛擬搖桿與按鈕區 (平板專屬，電腦模式隱藏) -->
         <div id="mobile-controls">
             <!-- 1P -->
             <div class="joystick-zone" id="joy-1" style="display:none;"><div class="joystick-base"><div class="joystick-stick" id="stick-1"></div></div></div>
-            <!-- 【修改版】：簡化按鈕文字為「拿 / 放」 -->
             <div class="action-btn" id="btn-1" style="display:none;">拿 / 放</div>
             
             <!-- 2P -->
@@ -181,17 +186,17 @@
     const playArea = document.getElementById('play-area'); const orderQueueEl = document.getElementById('order-queue');
     let customers = []; let activeOrders = []; let orderIdCounter = 0; let customerSpawnTimer = 0;
 
-    // --- 雙人狀態設定 (interactionRange 大幅增加容錯率) ---
+    // --- 雙人狀態設定 ---
     const players = [
-        { id: '1', el: document.getElementById('player-1'), dirEl: document.getElementById('player-1').querySelector('.player-dir'), x: 0, y: 0, w: 50, h: 60, speed: 7, vx: 0, vy: 0, facing: { x: 0, y: -1 }, heldItem: null, interactionRange: 75, keys: { up: 'w', down: 's', left: 'a', right: 'd', action: 'Space' }, active: false, joyVector: { x: 0, y: 0 } },
-        { id: '2', el: document.getElementById('player-2'), dirEl: document.getElementById('player-2').querySelector('.player-dir'), x: 0, y: 0, w: 50, h: 60, speed: 7, vx: 0, vy: 0, facing: { x: 0, y: -1 }, heldItem: null, interactionRange: 75, keys: { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', action: 'Enter' }, active: false, joyVector: { x: 0, y: 0 } }
+        { id: '1', el: document.getElementById('player-1'), dirEl: document.getElementById('player-1').querySelector('.player-dir'), x: 0, y: 0, w: 50, h: 60, speed: 7, vx: 0, vy: 0, facing: { x: 0, y: -1 }, heldItem: null, interactionRange: 80, keys: { up: 'w', down: 's', left: 'a', right: 'd', action: 'Space' }, active: false, joyVector: { x: 0, y: 0 } },
+        { id: '2', el: document.getElementById('player-2'), dirEl: document.getElementById('player-2').querySelector('.player-dir'), x: 0, y: 0, w: 50, h: 60, speed: 7, vx: 0, vy: 0, facing: { x: 0, y: -1 }, heldItem: null, interactionRange: 80, keys: { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', action: 'Enter' }, active: false, joyVector: { x: 0, y: 0 } }
     ];
 
     const keysState = {};
     window.addEventListener('keydown', (e) => { keysState[e.key] = true; if(e.code === 'Space' && gameActive && players[0].active) handleInteract(players[0]); if(e.key === 'Enter' && gameActive && players[1].active) handleInteract(players[1]); });
     window.addEventListener('keyup', (e) => { keysState[e.key] = false; });
 
-    // --- 站點註冊 ---
+    // --- 站點註冊 (全開無限版) ---
     const stations = [
         { id: 'serve-station', type: 'serve', el: document.getElementById('serve-station'), items: [] },
         { id: 'trash-station', type: 'trash', el: document.getElementById('trash-station'), items: [] },
@@ -289,8 +294,8 @@
 
     // --- 互動邏輯 (超大感應範圍) ---
     function handleInteract(p) {
-        // 【修改版】：大幅擴大拿取/放下的感應區(w: 60, h: 60)，並且往前延伸，讓拿東西不用對得那麼準
-        const interactBox = { x: p.x + p.w/2 + p.facing.x * p.interactionRange - 30, y: p.y + p.h/2 + p.facing.y * p.interactionRange - 30, w: 60, h: 60 };
+        // 【優化】放大的互動判定區：寬高 70x70，且向面向的方向延伸更遠，容許極大誤差
+        const interactBox = { x: p.x + p.w/2 + p.facing.x * p.interactionRange - 35, y: p.y + p.h/2 + p.facing.y * p.interactionRange - 35, w: 70, h: 70 };
         let target = null; for (let st of stations) { if (isColliding(interactBox, st.bounds)) { target = st; break; } }
         
         if (p.heldItem) {
@@ -313,6 +318,20 @@
         }
     }
     
+    // 全域浮動文字函數 (修復 bug)
+    function showFloatingText(text, targetElement, color = "white") {
+        const floatEl = document.createElement('div');
+        floatEl.classList.add('floating-text');
+        floatEl.innerText = text;
+        floatEl.style.color = color;
+        const rect = targetElement.getBoundingClientRect();
+        const playAreaRect = playArea.getBoundingClientRect();
+        floatEl.style.left = `${rect.left - playAreaRect.left + rect.width/2 - 40}px`;
+        floatEl.style.top = `${rect.top - playAreaRect.top}px`;
+        playArea.appendChild(floatEl);
+        setTimeout(() => floatEl.remove(), 1000);
+    }
+
     function checkOrderFulfillment(heldItem, p, target) {
         let matched = false;
         for (let i = 0; i < activeOrders.length; i++) {
@@ -415,26 +434,13 @@
             p.el.style.left = `${p.x}px`; p.el.style.top = `${p.y}px`; p.el.style.zIndex = Math.floor(p.y + p.h) + 5;
             if (p.heldItem) { p.heldItem.el.classList.add('held-by-player'); p.heldItem.el.style.left = `${p.x + p.w/2 - p.heldItem.el.offsetWidth/2}px`; p.heldItem.el.style.top = `${p.y}px`; p.heldItem.el.style.zIndex = 10000; }
             
-            const interactBox = { x: p.x + p.w/2 + p.facing.x * p.interactionRange - 30, y: p.y + p.h/2 + p.facing.y * p.interactionRange - 30, w: 60, h: 60 };
+            const interactBox = { x: p.x + p.w/2 + p.facing.x * p.interactionRange - 35, y: p.y + p.h/2 + p.facing.y * p.interactionRange - 35, w: 70, h: 70 };
             for (let st of stations) { if (isColliding(interactBox, st.bounds)) { st.el.classList.add('highlight'); break; } }
         });
         requestAnimationFrame(updatePhysics);
     }
 
     function addScore(points) { score += points; const sd = document.getElementById('score'); sd.innerText = score; sd.style.color = score < 0 ? '#ef4444' : '#16a34a'; sd.style.transform = 'scale(1.5)'; setTimeout(() => sd.style.transform = 'scale(1)', 200); }
-
-    function showFloatingText(text, targetElement, color = "white") {
-        const floatEl = document.createElement('div');
-        floatEl.classList.add('floating-text');
-        floatEl.innerText = text;
-        floatEl.style.color = color;
-        const rect = targetElement.getBoundingClientRect();
-        const playAreaRect = playArea.getBoundingClientRect();
-        floatEl.style.left = `${rect.left - playAreaRect.left + rect.width/2 - 40}px`;
-        floatEl.style.top = `${rect.top - playAreaRect.top}px`;
-        playArea.appendChild(floatEl);
-        setTimeout(() => floatEl.remove(), 1000);
-    }
 
     function updateGameLogic() {
         if (!gameActive) return;
@@ -451,18 +457,16 @@
         customerSpawnTimer++; if (customerSpawnTimer > 8 && customers.length < 4) { if (Math.random() > 0.4) spawnCustomer(); customerSpawnTimer = 0; }
     }
 
-    // --- 啟動與智慧控制器排版 ---
-    function startGame(playersNum) {
+    // --- 啟動與控制器排版 ---
+    function startGame(playersNum, useTouchMode) {
         playerCount = playersNum;
         document.getElementById('start-menu').style.display = 'none';
         document.getElementById('game-container').style.display = 'flex';
         
         renderSupplyStations();
 
-        const forceTouch = document.getElementById('force-touch-controls').checked;
-        const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || forceTouch;
-        
-        if (isTouchDevice) {
+        // 【修改點】：如果是電腦模式，完全隱藏 mobile-controls；如果是平板觸控模式才顯示
+        if (useTouchMode) {
             document.getElementById('mobile-controls').style.display = 'block';
             const joy1 = document.getElementById('joy-1'); const btn1 = document.getElementById('btn-1');
             joy1.style.display = 'flex'; btn1.style.display = 'flex';
@@ -489,18 +493,21 @@
             
             setupJoystick('joy-1', 'stick-1', 0);
             btn1.addEventListener('pointerdown', (e) => { e.preventDefault(); handleInteract(players[0]); });
+        } else {
+            // 電腦模式，關閉虛擬搖桿與按鍵
+            document.getElementById('mobile-controls').style.display = 'none';
         }
 
-        // 玩家出生在畫面 80% 高度的「絕對空曠區」
+        // 絕對安全的出生點，位於下方空曠區 (高於觸控區域)
         players[0].active = true; players[0].el.style.display = 'flex';
         players[0].x = playArea.offsetWidth / 2 - (playerCount===2 ? 80 : 25); 
-        players[0].y = playArea.offsetHeight * 0.8; 
+        players[0].y = playArea.offsetHeight * 0.85; 
         players[0].el.style.left = `${players[0].x}px`; players[0].el.style.top = `${players[0].y}px`;
 
         if (playerCount === 2) {
             players[1].active = true; players[1].el.style.display = 'flex';
             players[1].x = playArea.offsetWidth / 2 + 30; 
-            players[1].y = playArea.offsetHeight * 0.8;
+            players[1].y = playArea.offsetHeight * 0.85;
             players[1].el.style.left = `${players[1].x}px`; players[1].el.style.top = `${players[1].y}px`;
         }
 
