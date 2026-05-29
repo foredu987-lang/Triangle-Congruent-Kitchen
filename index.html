@@ -292,9 +292,41 @@
 </div>
 
 <script>
-    document.addEventListener('touchmove', function(e) { if (!e.target.closest('.shop-content') && !e.target.closest('#name-input-section')) e.preventDefault(); }, { passive: false });
-    document.addEventListener('gesturestart', function(e) { e.preventDefault(); });
+    // --- 終極防誤觸與畫面鎖定機制 (專為平板與 iOS Safari 設計) ---
+    
+    // 1. 阻止背景滑動 (保留商店與輸入框的滾動權限)
+    document.addEventListener('touchmove', function(e) { 
+        if (!e.target.closest('.shop-content') && !e.target.closest('#name-input-section')) {
+            e.preventDefault(); 
+        }
+    }, { passive: false });
+    
+    // 2. 阻止 Safari 預設的雙擊放大 (連按)
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(e) {
+        let now = (new Date()).getTime();
+        if (now - lastTouchEnd <= 300) {
+            // 如果連按的不是商店裡的內容，就阻止放大
+            if (!e.target.closest('.shop-content') && !e.target.closest('#name-input-section')) {
+                e.preventDefault();
+            }
+        }
+        lastTouchEnd = now;
+    }, { passive: false });
 
+    // 3. 阻止多指捏合縮放 (Pinch to zoom)
+    document.addEventListener('touchstart', function(e) {
+        if (e.touches.length > 1) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+
+    // 4. 阻止舊版 Safari 的手勢縮放
+    document.addEventListener('gesturestart', function(e) { 
+        e.preventDefault(); 
+    });
+
+    // --- 全域函數 ---
     function showFloatingText(text, targetElement, color = "white") {
         const floatEl = document.createElement('div'); floatEl.classList.add('floating-text');
         floatEl.innerText = text; floatEl.style.color = color;
