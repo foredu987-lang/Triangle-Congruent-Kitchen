@@ -22,7 +22,9 @@
 
         /* --- 遊戲主體 --- */
         #game-container { position: relative; width: 100%; height: 100%; display: none; flex-direction: column; }
-        #hud { height: 8vh; min-height: 50px; background-color: rgba(255,255,255,0.9); box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; padding: 0 5vw; z-index: 8500; position: absolute; top:0; width: 100%; pointer-events: auto;}
+        
+        /* 移除原本的白底橫幅，改為右上角浮動配置 */
+        #hud { position: absolute; top: 2vh; right: 2vw; z-index: 8500; pointer-events: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
         
         #order-queue { position: absolute; top: 2vh; left: 15vw; display: flex; gap: 20px; z-index: 8000; pointer-events: none; justify-content: flex-start; align-items: flex-end; }
         .order-ticket { width: 130px; background: white; border: 3px solid #d1d5db; border-top: 10px solid #94a3b8; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center; padding: 8px 5px; transition: all 0.3s; position: relative; }
@@ -150,15 +152,22 @@
     <!-- 遊戲容器 -->
     <div id="game-container">
         <div id="hud">
-            <div class="flex items-center gap-4">
-                <div class="text-2xl font-black text-green-600 bg-white px-4 py-1 rounded-xl border-4 border-green-200">金錢: $<span id="money">0</span></div>
-                <button onclick="openShop()" class="bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-black text-xl px-4 py-2 rounded-xl border-b-4 border-yellow-600 active:border-b-0 active:translate-y-1 shadow-md">🛒 商店</button>
+            <!-- 上排：金錢 -->
+            <div class="flex items-center gap-3">
+                <div class="text-xl font-black text-green-900 bg-white/60 backdrop-blur-sm px-3 py-1 rounded-xl border-2 border-green-500/50 shadow-sm">金錢: $<span id="money">0</span></div>
             </div>
-            <div class="flex items-center gap-4">
-                <div class="text-2xl font-black text-red-600 bg-white px-4 py-1 rounded-xl border-4 border-red-200">🤬: <span id="angry-count">0</span>/3</div>
-                <div class="text-2xl font-black text-red-500 bg-white px-4 py-1 rounded-xl border-4 border-red-200">倒數: <span id="timer">480</span>s</div>
+            <!-- 下排：生氣值與倒數 -->
+            <div class="flex items-center gap-3">
+                <div class="text-xl font-black text-red-900 bg-white/60 backdrop-blur-sm px-3 py-1 rounded-xl border-2 border-red-500/50 shadow-sm">🤬: <span id="angry-count">0</span>/3</div>
+                <div class="text-xl font-black text-red-900 bg-white/60 backdrop-blur-sm px-3 py-1 rounded-xl border-2 border-red-500/50 shadow-sm">倒數: <span id="timer">480</span>s</div>
             </div>
         </div>
+
+        <!-- 【修正佈局】獨立的商店按鈕，縮小字體並完美置中於點餐檯(35vw)與料理吧台(42vw)之間的空隙 -->
+        <button onclick="openShop()" style="position: absolute; left: 38.5vw; top: 25vh; transform: translateX(-50%); z-index: 8500; pointer-events: auto; white-space: nowrap;" class="bg-yellow-400/90 hover:bg-yellow-500 text-yellow-900 font-black text-sm md:text-base px-3 py-1.5 rounded-lg border-b-4 border-yellow-600 active:border-b-0 active:translate-y-1 shadow-md backdrop-blur-sm flex flex-col items-center leading-tight transition-transform">
+            <span class="text-lg md:text-xl">➕</span>
+            <span>增加機台</span>
+        </button>
 
         <div id="play-area">
             <div id="order-queue"></div>
